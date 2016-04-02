@@ -9,13 +9,13 @@
 import UIKit
 
 public class Form: UIView, Validate {
-    
-    let alert = Alert(frame: CGRectZero, type: .Danger)
-    let DefaultAlertBottomMergin: CGFloat = 10.0
-    
+
+    let alert = Alert(frame: CGRect.zero, type: .Danger)
+    let defaultAlertBottomMergin: CGFloat = 10.0
+
     var alertHeightConstraint: NSLayoutConstraint?
     public var alertFont: UIFont = UIFont.systemFontOfSize(16)
-    
+
     public override func layoutSubviews() {
         super.layoutSubviews()
         if alert.superview == nil {
@@ -24,26 +24,33 @@ public class Form: UIView, Validate {
             self.addSubview(alert)
             let topConstraints = findConstraintsByAttribute(.Top)
             for constraint in topConstraints {
-                let vertical = constraint.constant > 0 ? constraint.constant : DefaultAlertBottomMergin
+                var vertical = defaultAlertBottomMergin
+                if constraint.constant > 0.0 {
+                   vertical = constraint.constant
+                }
                 let c = NSLayoutConstraint.constraintsWithVisualFormat(
                     "V:[alert]-v-[item]",
                     options: [],
                     metrics: ["v": vertical],
-                    views: ["alert" : alert, "item" : constraint.firstItem])
+                    views: ["alert" : alert, "item" : constraint.firstItem]
+                )
                 self.addConstraints(c)
                 self.removeConstraint(constraint)
             }
-            let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[alert]-0-|", options: [], metrics: nil, views: ["alert" : alert])
-            let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[alert]", options: [], metrics: nil, views: ["alert" : alert])
+            let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
+                "H:|-0-[alert]-0-|", options: [], metrics: nil, views: ["alert" : alert])
+            let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
+                "V:|-0-[alert]", options: [], metrics: nil, views: ["alert" : alert])
             self.addConstraints(horizontalConstraints)
             self.addConstraints(verticalConstraints)
-            
-            let h = NSLayoutConstraint(item: alert, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1, constant: 0)
+
+            let h = NSLayoutConstraint(item: alert, attribute: .Height, relatedBy: .Equal,
+                toItem: nil, attribute: .Height, multiplier: 1, constant: 0)
             self.alert.addConstraint(h)
             self.alertHeightConstraint = h
         }
         alert.font = alertFont
-        let s = alert.sizeThatFits(CGSizeZero)
+        let s = alert.sizeThatFits(CGSize.zero)
         if s.height > 0 {
             let height = s.height + alert.insets.top + alert.insets.bottom
             self.alertHeightConstraint?.constant = height
@@ -51,7 +58,7 @@ public class Form: UIView, Validate {
             self.alertHeightConstraint?.constant = 0
         }
     }
-    
+
     public func validate() -> (Bool, String) {
         var errors: [String] = []
         var valid = true
@@ -64,16 +71,16 @@ public class Form: UIView, Validate {
                 }
             }
         }
-        let message = errors.count > 0 ? errors[0] : ""
+        let message = errors.first ?? ""
         setAlertText(message)
         return (valid, message)
     }
-    
+
     public func setAlertText(text: String) {
         alert.text = text
         setNeedsLayout()
     }
-    
+
     private func findConstraintsByAttribute(attribute: NSLayoutAttribute) -> [NSLayoutConstraint] {
         var constraints: [NSLayoutConstraint] = []
         for constraint in self.constraints {
@@ -84,7 +91,7 @@ public class Form: UIView, Validate {
         }
         return constraints
     }
-    
+
     private func close(button: UIButton) {
         setAlertText("")
     }

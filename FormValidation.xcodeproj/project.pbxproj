@@ -123,6 +123,7 @@
 				3122995E1CAD223800C40385 /* Frameworks */,
 				3122995F1CAD223800C40385 /* Headers */,
 				312299601CAD223800C40385 /* Resources */,
+				315D205E1CAFC7D300F7A4F8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -203,6 +204,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		315D205E1CAFC7D300F7A4F8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3122995D1CAD223800C40385 /* Sources */ = {
@@ -399,6 +416,7 @@
 				312299781CAD223800C40385 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		312299791CAD223800C40385 /* Build configuration list for PBXNativeTarget "FormValidationTests" */ = {
 			isa = XCConfigurationList;
@@ -407,6 +425,7 @@
 				3122997B1CAD223800C40385 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

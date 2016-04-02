@@ -19,10 +19,10 @@ internal extension UIColor {
 
 /// Alert is the feedback text for user action
 public class Alert: UILabel {
-    
+
     /**
      Colors is theme set like bootstrap alert styling
-     
+
      - Success: Success style
      - Info:    Info style
      - Warning: Warning style
@@ -33,10 +33,10 @@ public class Alert: UILabel {
         case Info
         case Warning
         case Danger
-        
+
         /**
          Return a background color of each style
-         
+
          - returns: Int, Hax RGB
          */
         public func bg() -> Int {
@@ -47,10 +47,10 @@ public class Alert: UILabel {
             case .Danger:  return 0xF2DEDE // RGB(242,222,222)
             }
         }
-        
+
         /**
          Return a border color of each style
-         
+
          - returns: Int, Hax RGB
          */
         public func border() -> Int {
@@ -61,10 +61,10 @@ public class Alert: UILabel {
             case .Danger:  return 0xE9C8CD // RGB(233,200,205)
             }
         }
-        
+
         /**
          Return a text color of each style
-         
+
          - returns: Int, Hax RGB
          */
         public func text() -> Int {
@@ -77,11 +77,11 @@ public class Alert: UILabel {
         }
     }
     public let insets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 30)
-    
+
     public var closeIconUnicode: UniChar = 0xF00D
     public var fontName: String = "FontAwesome"
     public var closeButton = UIButton(type: .Custom)
-    
+
     convenience init(frame: CGRect, type: Colors) {
         self.init(frame: frame)
         self.userInteractionEnabled = true
@@ -93,7 +93,7 @@ public class Alert: UILabel {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.numberOfLines = 0
     }
-    
+
     public override func layoutSubviews() {
         super.layoutSubviews()
         /// Conceal if close button dose not have the target
@@ -108,7 +108,7 @@ public class Alert: UILabel {
                 closeButton.setTitleColor(UIColor(white: 0.5, alpha: 0.5), forState: .Normal)
                 closeButton.setTitleColor(UIColor(white: 0.5, alpha: 1.0), forState: .Highlighted)
                 closeButton.titleLabel?.font = font
-                closeButton.frame = CGRectMake(0, 0, size.width, size.height)
+                closeButton.frame = CGRect.init(x: 0, y: 0, width: size.width, height: size.height)
                 self.addSubview(closeButton)
             } else {
                 NSLog("%@ not found. Add the font file or change Alert#fontName, please", fontName)
@@ -117,14 +117,14 @@ public class Alert: UILabel {
         /// Modify a position of the close button
         let s = closeButton.frame.size
         closeButton.hidden = self.frame.height <= 0.0
-        closeButton.frame = CGRectMake(
-            self.frame.width - self.insets.right / 2 - s.width / 2 ,
-            self.frame.height / 2 - s.height / 2,
-            s.width,
-            s.height
+        closeButton.frame = CGRect.init(
+            x: self.frame.width - self.insets.right / 2 - s.width / 2,
+            y: self.frame.height / 2 - s.height / 2,
+            width: s.width,
+            height: s.height
         )
     }
-    
+
     public override func drawTextInRect(rect: CGRect) {
         super.drawTextInRect(UIEdgeInsetsInsetRect(rect, insets))
     }
