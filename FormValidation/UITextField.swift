@@ -39,8 +39,8 @@ extension UITextField: Validate, ValidatorBuilder {
     }
 
     private struct Colors {
-        static var Valid: UIColor = UIColor(hex: 0xB90000, alpha: 1)
-        static var Invalid: UIColor = UIColor(hex: 0x00B900, alpha: 1)
+        static var Valid: UIColor = UIColor(hex: 0x00B900, alpha: 1)
+        static var Invalid: UIColor = UIColor(hex: 0xB90000, alpha: 1)
     }
 
     public var validators: [Validator] {
@@ -113,10 +113,11 @@ extension UITextField: Validate, ValidatorBuilder {
                 views: ["icon": icon]
             )
             self.addConstraints(horizontalConstraint)
+            let v = (self.frame.height - size.height) / 2
             let verticalConstraint = NSLayoutConstraint.constraintsWithVisualFormat(
-                "V:|-[icon(>=h)]-|",
-                options: [.AlignAllCenterY],
-                metrics: ["h": size.height],
+                "V:|-v-[icon(h)]",
+                options: [],
+                metrics: ["v": v, "h": size.height],
                 views: ["icon": icon]
             )
             self.addConstraints(verticalConstraint)

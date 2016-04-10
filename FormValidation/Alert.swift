@@ -94,6 +94,10 @@ public class Alert: UILabel {
         self.numberOfLines = 0
     }
 
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+
     public override func layoutSubviews() {
         super.layoutSubviews()
         /// Conceal if close button dose not have the target
