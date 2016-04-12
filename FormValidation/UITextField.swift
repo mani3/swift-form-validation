@@ -75,15 +75,19 @@ extension UITextField: Validate, ValidatorBuilder {
 
     public func validate() -> (Bool, String) {
         dismissValidationIcon()
-        for validator: Validator in validators {
+        var errors: [String] = []
+        for validator in validators {
             let (valid, errorMessage) = validator.validate()
             if !valid {
-                showValidationIcon(Icons.Exclamation, color: Colors.Invalid)
-                return (false, errorMessage)
+                errors.append(errorMessage)
             }
         }
-        showValidationIcon(Icons.Check, color: Colors.Valid)
-        return (true, "")
+        if errors.isEmpty {
+            showValidationIcon(Icons.Check, color: Colors.Valid)
+        } else {
+            showValidationIcon(Icons.Exclamation, color: Colors.Invalid)
+        }
+        return (errors.isEmpty, errors.first ?? "")
     }
 
     public func showValidationIcon(unicode: UniChar, color: UIColor) {
