@@ -29,18 +29,18 @@ extension UITextField: Validate, ValidatorBuilder {
         static var BorderColorKey = "border_color_key"
     }
 
-    private struct Fonts {
-        static var FontAwesome = "FontAwesome"
+    public struct Fonts {
+        public static var FontAwesome = "FontAwesome"
     }
 
-    private struct Icons {
-        static var Exclamation: UniChar = 0xF06A // Exclamation-Circle
-        static var Check: UniChar = 0xF058 // Check-Circle
+    public struct Icons {
+        public static var Exclamation: UniChar = 0xF06A // Exclamation-Circle
+        public static var Check: UniChar = 0xF058 // Check-Circle
     }
 
-    private struct Colors {
-        static var Valid: UIColor = UIColor(hex: 0xB90000, alpha: 1)
-        static var Invalid: UIColor = UIColor(hex: 0x00B900, alpha: 1)
+    public struct Colors {
+        public static var Valid: UIColor = UIColor(hex: 0x00B900, alpha: 1)
+        public static var Invalid: UIColor = UIColor(hex: 0xB90000, alpha: 1)
     }
 
     public var validators: [Validator] {
@@ -75,15 +75,19 @@ extension UITextField: Validate, ValidatorBuilder {
 
     public func validate() -> (Bool, String) {
         dismissValidationIcon()
-        for validator: Validator in validators {
+        var errors: [String] = []
+        for validator in validators {
             let (valid, errorMessage) = validator.validate()
             if !valid {
-                showValidationIcon(Icons.Exclamation, color: Colors.Invalid)
-                return (false, errorMessage)
+                errors.append(errorMessage)
             }
         }
-        showValidationIcon(Icons.Check, color: Colors.Valid)
-        return (true, "")
+        if errors.isEmpty {
+            showValidationIcon(Icons.Check, color: Colors.Valid)
+        } else {
+            showValidationIcon(Icons.Exclamation, color: Colors.Invalid)
+        }
+        return (errors.isEmpty, errors.first ?? "")
     }
 
     public func showValidationIcon(unicode: UniChar, color: UIColor) {
@@ -113,10 +117,11 @@ extension UITextField: Validate, ValidatorBuilder {
                 views: ["icon": icon]
             )
             self.addConstraints(horizontalConstraint)
+            let v = (self.frame.height - size.height) / 2
             let verticalConstraint = NSLayoutConstraint.constraintsWithVisualFormat(
-                "V:|-[icon(>=h)]-|",
-                options: [.AlignAllCenterY],
-                metrics: ["h": size.height],
+                "V:|-v-[icon(h)]",
+                options: [],
+                metrics: ["v": v, "h": size.height],
                 views: ["icon": icon]
             )
             self.addConstraints(verticalConstraint)

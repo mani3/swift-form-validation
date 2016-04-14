@@ -13,67 +13,72 @@ public class Form: UIView, Validate {
     let alert = Alert(frame: CGRect.zero, type: .Danger)
     let defaultAlertBottomMergin: CGFloat = 10.0
 
-    var alertHeightConstraint: NSLayoutConstraint?
-    public var alertFont: UIFont = UIFont.systemFontOfSize(16)
+    public var alertFont: UIFont? = UIFont.systemFontOfSize(16)
+    var constants: [NSLayoutConstraint: CGFloat] = [:]
+
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+    }
 
     public override func layoutSubviews() {
         super.layoutSubviews()
         if alert.superview == nil {
-            /// Setup alert view
-            alert.closeButton.addTarget(self, action: "close:", forControlEvents: .TouchUpInside)
-            self.addSubview(alert)
-            let topConstraints = findConstraintsByAttribute(.Top)
-            for constraint in topConstraints {
-                var vertical = defaultAlertBottomMergin
-                if constraint.constant > 0.0 {
-                   vertical = constraint.constant
-                }
-                let c = NSLayoutConstraint.constraintsWithVisualFormat(
-                    "V:[alert]-v-[item]",
-                    options: [],
-                    metrics: ["v": vertical],
-                    views: ["alert" : alert, "item" : constraint.firstItem]
-                )
-                self.addConstraints(c)
-                self.removeConstraint(constraint)
-            }
-            let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
-                "H:|-0-[alert]-0-|", options: [], metrics: nil, views: ["alert" : alert])
-            let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat(
-                "V:|-0-[alert]", options: [], metrics: nil, views: ["alert" : alert])
-            self.addConstraints(horizontalConstraints)
-            self.addConstraints(verticalConstraints)
 
-            let h = NSLayoutConstraint(item: alert, attribute: .Height, relatedBy: .Equal,
-                toItem: nil, attribute: .Height, multiplier: 1, constant: 0)
-            self.alert.addConstraint(h)
-            self.alertHeightConstraint = h
+            /// Add the alert label
+            self.addSubview(alert)
+
+            /// Add the close button on alert
+            alert.closeButton.addTarget(self, action:
+                #selector(Form.close(_:)), forControlEvents: .TouchUpInside)
         }
+        /// Font
         alert.font = alertFont
-        let s = alert.sizeThatFits(CGSize.zero)
-        if s.height > 0 {
-            let height = s.height + alert.insets.top + alert.insets.bottom
-            self.alertHeightConstraint?.constant = height
-        } else {
-            self.alertHeightConstraint?.constant = 0
+
+        /// Fix a height of alert label depending on message
+        let size = alert.sizeThatFits(CGSize.init(
+            width: self.frame.width - alert.insets.right, height: 0))
+        print(size)
+        var height: CGFloat = 0
+        if size.height > 0 {
+            height = size.height + alert.insets.top + alert.insets.bottom
+        }
+
+        /// Set a position of Alert
+        alert.frame = CGRect.init(x: 0, y: 0, width: self.frame.width, height: height)
+
+        /// Setup constraints for alert space
+        let topConstraints = findConstraintsByAttribute(.Top)
+        for constraint in topConstraints {
+            if constants[constraint] == nil {
+                constants[constraint] = constraint.constant
+            }
+            let mergin = defaultAlertBottomMergin
+            if height > 0.0 {
+                constraint.constant = height + mergin
+            } else {
+                constraint.constant = constants[constraint] ?? 0.0
+            }
+        }
+    }
+
+    private func validation(view: UIView, inout errors: [String]) {
+        for v in view.subviews {
+            if let validation = v as? Validate {
+                let (valid, message) = validation.validate()
+                if !valid {
+                    errors.append(message)
+                }
+            }
+            self.validation(v, errors: &errors)
         }
     }
 
     public func validate() -> (Bool, String) {
         var errors: [String] = []
-        var valid = true
-        for view in self.subviews {
-            if let validation = view as? Validate {
-                let (isValid, errorMesssage) = validation.validate()
-                if !isValid {
-                    errors.append(errorMesssage)
-                    valid = false
-                }
-            }
-        }
+        validation(self, errors: &errors)
         let message = errors.first ?? ""
         setAlertText(message)
-        return (valid, message)
+        return (errors.isEmpty, message)
     }
 
     public func setAlertText(text: String) {
@@ -92,7 +97,7 @@ public class Form: UIView, Validate {
         return constraints
     }
 
-    private func close(button: UIButton) {
+    public func close(button: UIButton) {
         setAlertText("")
     }
 }

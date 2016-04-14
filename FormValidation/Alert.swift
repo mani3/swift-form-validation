@@ -90,8 +90,12 @@ public class Alert: UILabel {
         self.layer.borderColor = UIColor(hex: type.border(), alpha: 1).CGColor
         self.layer.backgroundColor = UIColor(hex: type.bg(), alpha: 1).CGColor
         self.textColor = UIColor(hex: type.text(), alpha: 1)
-        self.translatesAutoresizingMaskIntoConstraints = false
         self.numberOfLines = 0
+        self.lineBreakMode = .ByClipping
+    }
+
+    public override func awakeFromNib() {
+        super.awakeFromNib()
     }
 
     public override func layoutSubviews() {
