@@ -29,6 +29,7 @@
 		312299831CAD2A0300C40385 /* Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312299821CAD2A0300C40385 /* Form.swift */; };
 		312299861CAD2A4500C40385 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312299851CAD2A4500C40385 /* Alert.swift */; };
 		3122998A1CAD32A400C40385 /* ValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312299891CAD32A400C40385 /* ValidatorTests.swift */; };
+		315FFCDD1CBF03B900302E9E /* FormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315FFCDC1CBF03B900302E9E /* FormTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		312299821CAD2A0300C40385 /* Form.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Form.swift; sourceTree = "<group>"; };
 		312299851CAD2A4500C40385 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		312299891CAD32A400C40385 /* ValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidatorTests.swift; sourceTree = "<group>"; };
+		315FFCDC1CBF03B900302E9E /* FormTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 				312299731CAD223800C40385 /* Info.plist */,
 				312299711CAD223800C40385 /* FormValidationTests.swift */,
 				312299891CAD32A400C40385 /* ValidatorTests.swift */,
+				315FFCDC1CBF03B900302E9E /* FormTests.swift */,
 			);
 			path = FormValidationTests;
 			sourceTree = "<group>";
@@ -250,7 +253,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Enviroment variables\nFRAMEWORK_NAME=\"${PROJECT_NAME}\"\nSIMULATOR_LIB_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${FRAMEWORK_NAME}.framework\"\nDEVICE_LIB_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${FRAMEWORK_NAME}.framework\"\nUNIVERSAL_LIB_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal\"\nFRAMEWORK=\"${UNIVERSAL_LIB_DIR}/${FRAMEWORK_NAME}.framework\"\n\n# Build iphonesimulator\n# ${CORRESPONDING_SIMULATOR_SDK_NAME}\nxcodebuild clean build -project ${PROJECT_NAME}.xcodeproj \\\n-scheme ${PROJECT_NAME} \\\n-sdk iphonesimulator \\\n-configuration ${CONFIGURATION} \\\nCODE_SIGNING_REQUIRED=NO \\\nONLY_ACTIVE_ARCH=NO \\\nARCHS=\"i386 x86_64\" \\\nVALID_ARCHS=\"i386 x86_64\" \\\nEFFECTIVE_PLATFORM_NAME=\"-iphonesimulator\"\n\n# Build iphoneos\nxcodebuild -project ${PROJECT_NAME}.xcodeproj \\\n-scheme ${PROJECT_NAME} \\\n-sdk iphoneos \\\n-configuration ${CONFIGURATION} \\\nCODE_SIGNING_REQUIRED=NO \\\nclean build\n\n# Setup a directory for universal\nrm -rf \"${UNIVERSAL_LIB_DIR}\"\nmkdir -p \"${FRAMEWORK}\"\n\n# Copy a base library\ncp -r \"${DEVICE_LIB_PATH}/.\" \"${FRAMEWORK}\"\n\n# Make an universal library\nlipo \"${SIMULATOR_LIB_PATH}/${FRAMEWORK_NAME}\" \\\n\"${DEVICE_LIB_PATH}/${FRAMEWORK_NAME}\" \\\n-create -output \"${FRAMEWORK}/${FRAMEWORK_NAME}\"\n\n# For Swift framework, Swiftmodule needs to be copied in the universal framework\nif [ -d \"${SIMULATOR_LIB_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" ]; then\ncp -f ${SIMULATOR_LIB_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/* \"${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" | echo\nfi\n\nif [ -d \"${DEVICE_LIB_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" ]; then\ncp -f ${DEVICE_LIB_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/* \"${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" | echo\nfi\n\nOUTPUT_DIR=\"${PROJECT_DIR}/Examples/SignUp/Frameworks\"\nrm -rf \"${OUTPUT_DIR}/${FRAMEWORK}\"\ncp -r \"${FRAMEWORK}\" \"${OUTPUT_DIR}\"\n";
+			shellScript = "# Enviroment variables\nFRAMEWORK_NAME=\"${PROJECT_NAME}\"\nSIMULATOR_LIB_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${FRAMEWORK_NAME}.framework\"\nDEVICE_LIB_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${FRAMEWORK_NAME}.framework\"\nUNIVERSAL_LIB_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal\"\nFRAMEWORK=\"${UNIVERSAL_LIB_DIR}/${FRAMEWORK_NAME}.framework\"\n\n# Build iphonesimulator\n# ${CORRESPONDING_SIMULATOR_SDK_NAME}\nxcodebuild clean build -project ${PROJECT_NAME}.xcodeproj \\\n-scheme ${PROJECT_NAME} \\\n-sdk iphonesimulator \\\n-configuration ${CONFIGURATION} \\\nCODE_SIGNING_REQUIRED=NO \\\nONLY_ACTIVE_ARCH=NO \\\nARCHS=\"i386 x86_64\" \\\nVALID_ARCHS=\"i386 x86_64\" \\\nEFFECTIVE_PLATFORM_NAME=\"-iphonesimulator\"\n\n# Build iphoneos\nxcodebuild -project ${PROJECT_NAME}.xcodeproj \\\n-scheme ${PROJECT_NAME} \\\n-sdk iphoneos \\\n-configuration ${CONFIGURATION} \\\nCODE_SIGNING_REQUIRED=NO \\\nclean build\n\n# Setup a directory for universal\nrm -rf \"${UNIVERSAL_LIB_DIR}\"\nmkdir -p \"${FRAMEWORK}\"\n\n# Copy a base library\ncp -r \"${DEVICE_LIB_PATH}/.\" \"${FRAMEWORK}\"\n\n# Make an universal library\nlipo \"${SIMULATOR_LIB_PATH}/${FRAMEWORK_NAME}\" \\\n\"${DEVICE_LIB_PATH}/${FRAMEWORK_NAME}\" \\\n-create -output \"${FRAMEWORK}/${FRAMEWORK_NAME}\"\n\n# For Swift framework, Swiftmodule needs to be copied in the universal framework\nif [ -d \"${SIMULATOR_LIB_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" ]; then\ncp -f ${SIMULATOR_LIB_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/* \"${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" | echo\nfi\n\nif [ -d \"${DEVICE_LIB_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" ]; then\ncp -f ${DEVICE_LIB_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/* \"${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" | echo\nfi\n\nOUTPUT_DIR=\"${PROJECT_DIR}/Examples/SignUp/Frameworks\"\nrm -rf \"${OUTPUT_DIR}/${FRAMEWORK}\"\ncp -r \"${FRAMEWORK}\" \"${OUTPUT_DIR}\"\n\nOUTPUT_DIR=\"${PROJECT_DIR}/Examples/SignIn/Frameworks\"\nrm -rf \"${OUTPUT_DIR}/${FRAMEWORK}\"\ncp -r \"${FRAMEWORK}\" \"${OUTPUT_DIR}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -272,6 +275,7 @@
 			files = (
 				3122998A1CAD32A400C40385 /* ValidatorTests.swift in Sources */,
 				312299721CAD223800C40385 /* FormValidationTests.swift in Sources */,
+				315FFCDD1CBF03B900302E9E /* FormTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

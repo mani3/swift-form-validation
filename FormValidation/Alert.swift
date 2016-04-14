@@ -91,6 +91,7 @@ public class Alert: UILabel {
         self.layer.backgroundColor = UIColor(hex: type.bg(), alpha: 1).CGColor
         self.textColor = UIColor(hex: type.text(), alpha: 1)
         self.numberOfLines = 0
+        self.lineBreakMode = .ByClipping
     }
 
     public override func awakeFromNib() {

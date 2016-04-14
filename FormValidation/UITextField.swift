@@ -29,18 +29,18 @@ extension UITextField: Validate, ValidatorBuilder {
         static var BorderColorKey = "border_color_key"
     }
 
-    private struct Fonts {
-        static var FontAwesome = "FontAwesome"
+    public struct Fonts {
+        public static var FontAwesome = "FontAwesome"
     }
 
-    private struct Icons {
-        static var Exclamation: UniChar = 0xF06A // Exclamation-Circle
-        static var Check: UniChar = 0xF058 // Check-Circle
+    public struct Icons {
+        public static var Exclamation: UniChar = 0xF06A // Exclamation-Circle
+        public static var Check: UniChar = 0xF058 // Check-Circle
     }
 
-    private struct Colors {
-        static var Valid: UIColor = UIColor(hex: 0x00B900, alpha: 1)
-        static var Invalid: UIColor = UIColor(hex: 0xB90000, alpha: 1)
+    public struct Colors {
+        public static var Valid: UIColor = UIColor(hex: 0x00B900, alpha: 1)
+        public static var Invalid: UIColor = UIColor(hex: 0xB90000, alpha: 1)
     }
 
     public var validators: [Validator] {

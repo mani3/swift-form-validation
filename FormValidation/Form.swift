@@ -35,7 +35,9 @@ public class Form: UIView, Validate {
         alert.font = alertFont
 
         /// Fix a height of alert label depending on message
-        let size = alert.sizeThatFits(CGSize.zero)
+        let size = alert.sizeThatFits(CGSize.init(
+            width: self.frame.width - alert.insets.right, height: 0))
+        print(size)
         var height: CGFloat = 0
         if size.height > 0 {
             height = size.height + alert.insets.top + alert.insets.bottom
